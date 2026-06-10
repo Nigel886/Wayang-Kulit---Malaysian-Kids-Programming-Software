@@ -1,0 +1,2128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wayang Kulit Coding Quest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              fredoka: ["Fredoka", "ui-sans-serif", "system-ui"],
+              poppins: ["Poppins", "ui-sans-serif", "system-ui"],
+            },
+            boxShadow: {
+              plush: "0 18px 40px rgba(15, 23, 42, 0.25)",
+              glow: "0 0 0 4px rgba(255, 215, 0, 0.25), 0 18px 40px rgba(15, 23, 42, 0.25)",
+              card: "0 14px 30px rgba(15, 23, 42, 0.18)",
+            },
+            keyframes: {
+              floaty: {
+                "0%,100%": { transform: "translateY(0px)" },
+                "50%": { transform: "translateY(-10px)" },
+              },
+              starPulse: {
+                "0%,100%": { transform: "translateY(0px) scale(1)", filter: "drop-shadow(0 0 0 rgba(255,215,0,0))" },
+                "50%": { transform: "translateY(-3px) scale(1.08)", filter: "drop-shadow(0 0 16px rgba(255,215,0,.65))" },
+              },
+              jiggle: {
+                "0%,100%": { transform: "translateX(0)" },
+                "15%": { transform: "translateX(-7px) rotate(-1deg)" },
+                "30%": { transform: "translateX(7px) rotate(1deg)" },
+                "45%": { transform: "translateX(-6px)" },
+                "60%": { transform: "translateX(6px)" },
+                "75%": { transform: "translateX(-3px)" },
+              },
+              pop: {
+                "0%": { transform: "scale(.9)" },
+                "70%": { transform: "scale(1.06)" },
+                "100%": { transform: "scale(1)" },
+              },
+              pulseRing: {
+                "0%": { transform: "translate(-50%, -50%) scale(.4)", opacity: ".55" },
+                "80%": { transform: "translate(-50%, -50%) scale(1.25)", opacity: "0" },
+                "100%": { transform: "translate(-50%, -50%) scale(1.25)", opacity: "0" },
+              },
+              puppetDance: {
+                "0%,100%": { transform: "translate(var(--px), var(--py)) rotate(0deg) scale(1)" },
+                "25%": { transform: "translate(calc(var(--px) + 2px), calc(var(--py) - 4px)) rotate(-3deg) scale(1.02)" },
+                "50%": { transform: "translate(calc(var(--px) - 2px), calc(var(--py) - 1px)) rotate(3deg) scale(1.02)" },
+                "75%": { transform: "translate(calc(var(--px) + 1px), calc(var(--py) - 5px)) rotate(-2deg) scale(1.01)" },
+              },
+              puppetRaise: {
+                "0%,100%": { transform: "translate(var(--px), var(--py)) rotate(0deg) scale(1)" },
+                "35%": { transform: "translate(calc(var(--px) + 1px), calc(var(--py) - 6px)) rotate(-4deg) scale(1.03)" },
+                "70%": { transform: "translate(calc(var(--px) - 1px), calc(var(--py) - 3px)) rotate(3deg) scale(1.02)" },
+              },
+              puppetBow: {
+                "0%,100%": { transform: "translate(var(--px), var(--py)) rotate(0deg) scale(1)" },
+                "50%": { transform: "translate(var(--px), calc(var(--py) + 6px)) rotate(10deg) scale(.98)" },
+              },
+            },
+            animation: {
+              floaty: "floaty 3.2s ease-in-out infinite",
+              starPulse: "starPulse 1.7s ease-in-out infinite",
+              jiggle: "jiggle .55s ease-in-out both",
+              pop: "pop .22s ease-out both",
+              pulseRing: "pulseRing .9s ease-out both",
+              puppetDance: "puppetDance .8s ease-in-out both",
+              puppetRaise: "puppetRaise .55s ease-in-out both",
+              puppetBow: "puppetBow .75s ease-in-out both",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :root {
+        --screen-radius: 2.7rem;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family: Fredoka, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background:
+          radial-gradient(1200px 700px at 20% 18%, rgba(255, 227, 161, 0.85), transparent 55%),
+          radial-gradient(900px 600px at 80% 25%, rgba(184, 255, 244, 0.75), transparent 55%),
+          radial-gradient(900px 700px at 40% 100%, rgba(255, 163, 231, 0.6), transparent 60%),
+          linear-gradient(180deg, #0b1222 0%, #081029 30%, #07143b 100%);
+        overflow-x: hidden;
+      }
+      .batik-overlay {
+        background:
+          radial-gradient(circle at 18px 18px, rgba(255, 255, 255, 0.14) 2px, transparent 3px),
+          radial-gradient(circle at 42px 42px, rgba(255, 255, 255, 0.12) 2px, transparent 3px),
+          repeating-radial-gradient(circle at 10px 10px, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 14px);
+        background-size: 64px 64px;
+        mix-blend-mode: soft-light;
+        opacity: 0.55;
+        pointer-events: none;
+      }
+      .tablet-bezel {
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.06)),
+          radial-gradient(600px 300px at 35% 25%, rgba(255, 255, 255, 0.18), transparent 60%),
+          linear-gradient(135deg, rgba(26, 36, 63, 1), rgba(12, 17, 33, 1));
+      }
+      .phone-bezel {
+        background:
+          radial-gradient(520px 420px at 40% 20%, rgba(255, 255, 255, 0.22), transparent 65%),
+          radial-gradient(520px 520px at 55% 85%, rgba(255, 255, 255, 0.12), transparent 70%),
+          linear-gradient(135deg, rgba(18, 24, 45, 1), rgba(8, 10, 20, 1));
+      }
+      .dynamic-island {
+        background: linear-gradient(180deg, rgba(15, 23, 42, 0.9), rgba(2, 6, 23, 0.95));
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+      }
+      .screen-sheen {
+        background:
+          radial-gradient(850px 380px at 40% 20%, rgba(255, 255, 255, 0.16), transparent 55%),
+          radial-gradient(520px 420px at 82% 78%, rgba(255, 255, 255, 0.1), transparent 60%);
+        pointer-events: none;
+      }
+      .wood-chest {
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 40%),
+          radial-gradient(700px 240px at 40% 20%, rgba(255, 235, 200, 0.22), transparent 60%),
+          linear-gradient(135deg, #8b5a2b 0%, #b8793a 40%, #6f3f1a 100%);
+      }
+      .wood-grain {
+        background:
+          repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0 2px, transparent 2px 14px),
+          repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0 1px, transparent 1px 10px);
+        mix-blend-mode: overlay;
+        opacity: 0.35;
+        pointer-events: none;
+      }
+      .parchment {
+        background:
+          radial-gradient(1000px 400px at 30% 20%, rgba(255, 255, 255, 0.5), transparent 55%),
+          repeating-linear-gradient(0deg, rgba(95, 70, 40, 0.08) 0 1px, transparent 1px 10px),
+          linear-gradient(135deg, #fff6df 0%, #f3e4c2 55%, #ffe8c6 100%);
+      }
+      .scroll-edge {
+        background:
+          radial-gradient(240px 130px at 20% 30%, rgba(255, 255, 255, 0.4), transparent 60%),
+          linear-gradient(180deg, #d4b892 0%, #b78d5f 100%);
+      }
+      .snap-grid {
+        background-image:
+          repeating-linear-gradient(
+            90deg,
+            rgba(80, 50, 25, 0.08) 0px,
+            rgba(80, 50, 25, 0.08) 1px,
+            transparent 1px,
+            transparent 34px
+          );
+      }
+      .theater-box {
+        background:
+          radial-gradient(420px 320px at 50% 70%, rgba(255, 200, 120, 0.32), transparent 62%),
+          radial-gradient(240px 180px at 50% 64%, rgba(255, 178, 70, 0.52), transparent 65%),
+          linear-gradient(135deg, #f6e2c2 0%, #e7c89d 55%, #f5dfb7 100%);
+      }
+      .lamp-glow {
+        background:
+          radial-gradient(260px 220px at 50% 65%, rgba(255, 190, 96, 0.78), rgba(255, 190, 96, 0.22) 45%, transparent 70%),
+          radial-gradient(520px 360px at 50% 72%, rgba(255, 156, 56, 0.28), transparent 65%);
+        pointer-events: none;
+      }
+      .block {
+        user-select: none;
+        touch-action: none;
+      }
+      .block .notch-top::before,
+      .block .notch-bottom::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        width: 26px;
+        height: 12px;
+        transform: translateX(-50%);
+        border-radius: 0 0 14px 14px;
+      }
+      .block .notch-top::before {
+        top: -2px;
+        border: 4px solid rgba(0, 0, 0, 0.24);
+        border-bottom: none;
+        background: rgba(255, 255, 255, 0.5);
+        filter: blur(0.15px);
+      }
+      .block .notch-bottom::after {
+        bottom: -10px;
+        background: rgba(255, 255, 255, 0.55);
+        border: 4px solid rgba(0, 0, 0, 0.22);
+        border-top: none;
+        clip-path: polygon(0 0, 100% 0, 50% 100%);
+        border-radius: 0 0 12px 12px;
+      }
+      .drag-ghost {
+        position: fixed;
+        z-index: 9999;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+      }
+      .invisible-scrollbar::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+      }
+      .drop-preview {
+        outline: 4px solid rgba(110, 231, 183, 0.9);
+        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.18), 0 20px 40px rgba(15, 23, 42, 0.18);
+        background: rgba(16, 185, 129, 0.12);
+        border-radius: 18px;
+      }
+      .insert-bar {
+        border-radius: 999px;
+        background: rgba(16, 185, 129, 0);
+        transition: background 0.12s ease, transform 0.12s ease;
+      }
+      .insert-bar:not(.end-loop-bar) {
+        height: 14px;
+      }
+      .insert-bar.active {
+        background: rgba(16, 185, 129, 0.22);
+        transform: scaleY(1.2);
+      }
+      .end-loop-bar {
+        height: auto;
+        border-radius: 22px;
+        border: 4px dashed rgba(255, 255, 255, 0.28);
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 22px rgba(15, 23, 42, 0.16);
+        padding: 10px 12px;
+      }
+      .rock-core {
+        transform-origin: 45px 40px;
+        transform-box: fill-box;
+        transition: opacity 0.18s ease, transform 0.18s ease;
+      }
+      .rock-core.rock-shake {
+        animation: rockShake 150ms ease-in-out 1;
+      }
+      .rock-core.rock-hidden {
+        opacity: 0;
+        transform: scale(0.2);
+      }
+      @keyframes rockShake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-6px) rotate(-3deg);
+        }
+        50% {
+          transform: translateX(6px) rotate(3deg);
+        }
+        75% {
+          transform: translateX(-4px) rotate(-2deg);
+        }
+      }
+      .rock-shard {
+        opacity: 0.95;
+        transform-origin: 45px 40px;
+        transform-box: fill-box;
+        animation: shatterBlast 600ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+      @keyframes shatterBlast {
+        0% {
+          opacity: 1;
+          transform: translate(0px, 0px) rotate(0deg) scale(1);
+        }
+        60% {
+          opacity: 0.95;
+          transform: translate(var(--dx), calc(var(--dy) - 16px)) rotate(var(--rot)) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.75);
+        }
+      }
+      .block-error {
+        filter: saturate(1.25);
+        background-image: linear-gradient(135deg, #ffd08a, #ffb100) !important;
+        border-color: rgba(126, 52, 0, 0.55) !important;
+        box-shadow: 0 0 0 6px rgba(255, 176, 0, 0.25), 0 20px 40px rgba(15, 23, 42, 0.24) !important;
+      }
+      .speech-bubble {
+        background: rgba(255, 255, 255, 0.96);
+        border: 3px solid rgba(15, 23, 42, 0.65);
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+      }
+      .speech-bubble::after {
+        content: "";
+        position: absolute;
+        left: var(--tailLeft, 22px);
+        bottom: -10px;
+        width: 16px;
+        height: 16px;
+        background: rgba(255, 255, 255, 0.96);
+        border-right: 3px solid rgba(15, 23, 42, 0.65);
+        border-bottom: 3px solid rgba(15, 23, 42, 0.65);
+        transform: rotate(45deg);
+      }
+      .speech-bubble.pointer-top::after {
+        left: var(--tailLeft, 22px);
+        top: -10px;
+        bottom: auto;
+        transform: rotate(225deg);
+      }
+      .speech-bubble.pointer-bottom::after {
+        left: var(--tailLeft, 22px);
+        bottom: -10px;
+        top: auto;
+        transform: rotate(45deg);
+      }
+      .puppet-outer {
+        transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+        transform-origin: 0 0;
+        transform-box: fill-box;
+        filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.45));
+      }
+      .puppet-inner {
+        transform-origin: 90px 120px;
+        transform-box: fill-box;
+      }
+      @keyframes puppetInnerDance {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-12px);
+        }
+      }
+      @keyframes puppetInnerRaise {
+        0%,
+        100% {
+          transform: rotate(-8deg);
+        }
+        50% {
+          transform: rotate(8deg);
+        }
+      }
+      @keyframes puppetInnerBow {
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        50% {
+          transform: rotate(18deg);
+        }
+      }
+      @keyframes puppetInnerShake {
+        0%,
+        100% {
+          transform: translateX(0) rotate(0deg);
+        }
+        20% {
+          transform: translateX(-10px) rotate(-6deg);
+        }
+        40% {
+          transform: translateX(10px) rotate(6deg);
+        }
+        60% {
+          transform: translateX(-8px) rotate(-4deg);
+        }
+        80% {
+          transform: translateX(8px) rotate(4deg);
+        }
+      }
+      .puppet-inner-dance {
+        animation: puppetInnerDance 0.55s ease-in-out infinite;
+      }
+      .puppet-inner-raise {
+        animation: puppetInnerRaise 0.7s ease-in-out infinite;
+      }
+      .puppet-inner-bow {
+        animation: puppetInnerBow 0.9s ease-in-out infinite;
+      }
+      .puppet-inner-shake {
+        animation: puppetInnerShake 0.5s ease-in-out 1;
+      }
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 16px;
+        border-radius: 5px;
+        opacity: 0.9;
+        animation: confettiFall 950ms ease-in forwards;
+      }
+      @keyframes confettiFall {
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 0.95;
+        }
+        100% {
+          transform: translateY(140px) rotate(160deg);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body class="relative min-h-screen">
+    <div class="absolute inset-0 batik-overlay"></div>
+
+    <main class="relative mx-auto flex min-h-screen w-full max-w-[520px] items-center justify-center px-4 py-10">
+      <section class="phone-bezel relative mx-auto w-full max-w-[420px] rounded-[3.2rem] border-[10px] border-white/15 p-[10px] shadow-plush">
+        <div class="absolute inset-[10px] rounded-[2.7rem] bg-black/25"></div>
+        <div
+          class="relative w-full overflow-hidden rounded-[2.7rem] border-4 border-white/15 bg-gradient-to-br from-slate-950/50 to-slate-900/70"
+          style="aspect-ratio: 9 / 19.5"
+        >
+          <div class="absolute inset-0 screen-sheen"></div>
+          <div class="dynamic-island absolute left-1/2 top-3 z-30 h-7 w-36 -translate-x-1/2 rounded-full border border-white/10"></div>
+
+          <div class="relative flex h-full w-full flex-col pt-0">
+            <header
+              id="mobileHeader"
+              class="relative z-20 border-b-4 border-white/10 bg-gradient-to-r from-emerald-500/25 via-cyan-500/20 to-fuchsia-500/20 px-3 pb-3 pt-12"
+            >
+              <div class="flex items-start justify-between gap-2 mt-3">
+                <div id="triPaneAnchor" class="min-w-0">
+                  <div class="font-fredoka text-[15px] font-extrabold leading-5 text-white drop-shadow">
+                    [ Level 1: Wayang Dance Quest ]
+                  </div>
+                  <div class="mt-2 flex flex-wrap items-center gap-2 text-[13px] font-extrabold text-white/90">
+                    <span class="rounded-2xl border-4 border-orange-700/40 bg-gradient-to-r from-amber-400 to-orange-500 px-3 py-1 text-orange-950 shadow-card">🌟 Goal: reach the Star on Grid 5!</span>
+                    <span class="rounded-2xl border-4 border-rose-900/40 bg-gradient-to-r from-rose-500 to-red-600 px-3 py-1 text-white shadow-card">☠️ Avoid: Sacred Rock on Grid 3!</span>
+                  </div>
+                </div>
+                <div class="flex shrink-0 flex-col items-end gap-2">
+                  <div class="flex items-center gap-1.5">
+                    <span class="animate-starPulse text-lg" style="animation-delay: 0ms">⭐</span>
+                    <span class="animate-starPulse text-lg" style="animation-delay: 160ms">⭐</span>
+                    <span class="animate-starPulse text-lg" style="animation-delay: 320ms">⭐</span>
+                  </div>
+                  <button
+                    id="menuBtn"
+                    class="relative rounded-2xl border-4 border-white/25 bg-gradient-to-br from-rose-400 to-amber-300 px-3 py-2 text-[13px] font-extrabold text-slate-900 shadow-card transition hover:scale-[1.03] active:scale-[0.98]"
+                    type="button"
+                  >
+                    Menu
+                    <span class="absolute -right-2 -top-2 h-3 w-3 rounded-full bg-white/70 shadow"></span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="mt-3 flex items-center justify-between gap-3 rounded-2xl border-4 border-white/15 bg-white/10 px-3 py-2 shadow-card">
+                <div class="select-none text-[11px] font-bold text-white/90">Show Academic Annotations</div>
+                <label id="annoToggleWrap" class="relative inline-flex shrink-0 cursor-pointer select-none items-center pointer-events-auto">
+                  <input id="annoToggle" type="checkbox" class="peer sr-only" />
+                  <div class="h-6 w-11 rounded-full bg-white/20 ring-2 ring-white/15 transition peer-checked:bg-emerald-400/70"></div>
+                  <div class="absolute left-1 top-1 h-4 w-4 rounded-full bg-white shadow transition peer-checked:translate-x-5"></div>
+                </label>
+              </div>
+            </header>
+
+            <div id="headerAnnotationLayer" class="pointer-events-none absolute inset-0 hidden z-50">
+              <div
+                class="speech-bubble pointer-bottom absolute w-[260px] max-w-[78%] rounded-2xl p-3 text-[11px] font-semibold text-slate-900"
+                data-bubble="tri"
+                data-target="triPaneAnchor"
+              >
+                Classic Tri-Pane Layout reducing the Gulf of Execution via Familiar Schema
+              </div>
+              <div
+                class="speech-bubble pointer-bottom absolute w-[240px] max-w-[72%] rounded-2xl p-3 text-[11px] font-semibold text-slate-900"
+                data-bubble="menu"
+                data-target="menuBtn"
+              >
+                Menu Button to select a different Level
+              </div>
+            </div>
+
+            <div id="screenScroll" class="invisible-scrollbar relative min-h-0 flex-1 overflow-y-auto px-3 pb-4 pt-3 [scrollbar-width:none]">
+              <div id="annotationLayer" class="pointer-events-none absolute left-0 top-0 hidden w-full z-50">
+                <div
+                  class="speech-bubble pointer-bottom absolute w-[260px] max-w-[78%] rounded-2xl p-3 text-[11px] font-semibold text-slate-900"
+                  data-bubble="canvas"
+                  data-target="canvasZone"
+                >
+                  Translucent Shadow Outline Preview supporting developing Motor Skills
+                </div>
+                <div
+                  class="speech-bubble pointer-bottom absolute w-[260px] max-w-[78%] rounded-2xl p-3 text-[11px] font-semibold text-slate-900"
+                  data-bubble="notches"
+                  data-target="paletteHintNotch"
+                >
+                  Geometric Slots acting as Physical Constraints for Error Prevention
+                </div>
+                <div
+                  class="speech-bubble pointer-bottom absolute w-[260px] max-w-[78%] rounded-2xl p-3 text-[11px] font-semibold text-slate-900"
+                  data-bubble="loop"
+                  data-target="palettePane"
+                >
+                  Nested Container Metaphor making Abstract Iteration Tangible
+                </div>
+                <div
+                  class="speech-bubble pointer-bottom absolute w-[260px] max-w-[78%] rounded-2xl p-3 text-[11px] font-semibold text-slate-900"
+                  data-bubble="error"
+                  data-target="errorAnchor"
+                >
+                  Visual Indicator narrowing down the Gulf of Evaluation during errors
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-3">
+              <section id="stagePane" class="relative overflow-hidden rounded-3xl border-4 border-white/15 shadow-card" style="height: clamp(250px, 38vh, 360px)">
+                <div class="theater-box absolute inset-0"></div>
+                <div class="lamp-glow absolute inset-0"></div>
+
+                <div class="relative flex h-full flex-col px-3 pb-3 pt-3">
+                  <div class="flex items-center justify-between">
+                    <div class="min-w-0">
+                      <div class="font-fredoka text-sm font-extrabold text-slate-900/90">Shadow Stage</div>
+                      <div class="text-[11px] font-semibold text-slate-900/65">Live feedback for your moves</div>
+                    </div>
+                    <div class="rounded-2xl border-4 border-slate-900/15 bg-white/55 px-2 py-1 text-[11px] font-extrabold text-slate-900 shadow">🎭</div>
+                  </div>
+
+                  <div id="stage" class="relative mt-2 flex-1 overflow-hidden rounded-3xl border-4 border-slate-900/20 bg-white/30 shadow-inner">
+                    <div class="absolute left-3 top-3 h-8 w-8 animate-floaty rounded-2xl border-4 border-slate-900/15 bg-gradient-to-br from-amber-300 to-orange-300 shadow-card"></div>
+                    <div class="absolute right-3 top-3 h-8 w-8 animate-floaty rounded-2xl border-4 border-slate-900/15 bg-gradient-to-br from-fuchsia-300 to-rose-300 shadow-card" style="animation-delay: 0.35s"></div>
+
+                    <svg class="absolute left-0 top-0 h-full w-full" viewBox="0 0 700 360" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="curtain" x1="0" x2="0" y1="0" y2="1">
+                          <stop offset="0" stop-color="#7a1537" />
+                          <stop offset="1" stop-color="#2d0a1a" />
+                        </linearGradient>
+                        <linearGradient id="goldTrim" x1="0" x2="1" y1="0" y2="0">
+                          <stop offset="0" stop-color="#ffd166" />
+                          <stop offset="1" stop-color="#ff9f1c" />
+                        </linearGradient>
+                        <linearGradient id="bambooFloor" x1="0" x2="1" y1="0" y2="0">
+                          <stop offset="0" stop-color="#92400e" />
+                          <stop offset="0.25" stop-color="#b45309" />
+                          <stop offset="0.5" stop-color="#d97706" />
+                          <stop offset="0.75" stop-color="#b45309" />
+                          <stop offset="1" stop-color="#92400e" />
+                        </linearGradient>
+                        <linearGradient id="bambooJoint" x1="0" x2="0" y1="0" y2="1">
+                          <stop offset="0" stop-color="#d97706" />
+                          <stop offset="1" stop-color="#92400e" />
+                        </linearGradient>
+                        <filter id="glow">
+                          <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                          <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                      </defs>
+                      <path d="M0 0H700V58C650 78 610 88 570 92C510 98 480 68 420 76C340 86 320 118 250 110C180 102 150 66 88 62C56 60 25 56 0 46Z" fill="url(#curtain)" opacity="0.95" />
+                      <path d="M0 58H700V70H0Z" fill="url(#goldTrim)" opacity="0.95" />
+                      <path d="M0 0H40V360H0Z" fill="url(#curtain)" opacity="0.92" />
+                      <path d="M660 0H700V360H660Z" fill="url(#curtain)" opacity="0.92" />
+                      <path d="M35 70H52V360H35Z" fill="url(#goldTrim)" opacity="0.9" />
+                      <path d="M648 70H665V360H648Z" fill="url(#goldTrim)" opacity="0.9" />
+                      <rect x="60" y="258" width="580" height="96" rx="6" fill="url(#bambooFloor)" opacity="0.85" />
+                      <rect x="60" y="258" width="580" height="14" rx="0" fill="url(#bambooJoint)" opacity="0.7" />
+                      <rect x="60" y="278" width="580" height="6" fill="#92400e" opacity="0.3" />
+                      <rect x="60" y="296" width="580" height="6" fill="#92400e" opacity="0.3" />
+                      <rect x="60" y="314" width="580" height="6" fill="#92400e" opacity="0.3" />
+                      <rect x="60" y="332" width="580" height="6" fill="#92400e" opacity="0.3" />
+                      <g stroke="#78350f" stroke-width="2.5" opacity="0.7">
+                        <line x1="175" y1="258" x2="175" y2="354" />
+                        <line x1="290" y1="258" x2="290" y2="354" />
+                        <line x1="405" y1="258" x2="405" y2="354" />
+                        <line x1="520" y1="258" x2="520" y2="354" />
+                        <line x1="635" y1="258" x2="635" y2="354" />
+                      </g>
+                      <g font-family="Fredoka One, Arial Rounded MT Bold, sans-serif" font-size="17" font-weight="900" fill="#fef3c7" opacity="0.75" text-anchor="middle">
+                        <text x="117" y="252">1</text>
+                        <text x="232" y="252">2</text>
+                        <text x="347" y="252">3</text>
+                        <text x="462" y="252">4</text>
+                        <text x="577" y="252">5</text>
+                      </g>
+                      <g>
+                        <path d="M577 218 L588 244 L565 230 L589 230 L566 244 Z" fill="#ffd700" filter="url(#glow)">
+                          <animateTransform attributeName="transform" type="scale" values="1;1.12;1" dur="1.6s" repeatCount="indefinite" additive="sum"/>
+                        </path>
+                        <circle cx="577" cy="224" r="4" fill="#fff8dc" opacity="0.9">
+                          <animate attributeName="opacity" values="0.9;0.3;0.9" dur="1.6s" repeatCount="indefinite"/>
+                        </circle>
+                      </g>
+
+                      <g id="obstacle" transform="translate(302, 188)">
+                        <g id="obstacleCore" class="rock-core">
+                          <path d="M12 54C8 43 16 34 26 29C30 19 44 10 58 14C70 18 76 27 78 36C86 44 84 56 72 60C60 64 48 66 34 64C22 62 15 60 12 54Z" fill="#7c3f1b" opacity="0.9" />
+                          <path d="M24 52C26 46 34 42 42 44C51 46 60 42 68 40" fill="none" stroke="#ffd166" stroke-width="4" stroke-linecap="round" opacity="0.65" />
+                          <path d="M20 26C12 16 14 10 22 12C30 14 26 22 20 26Z" fill="#2dd4bf" opacity="0.75" />
+                          <path d="M74 30C80 22 86 20 84 28C82 36 76 36 74 30Z" fill="#f472b6" opacity="0.75" />
+                          <path d="M22 30C14 20 16 14 24 16C32 18 28 26 22 30Z" fill="#4ade80" opacity="0.6" />
+                          <path d="M70 32C78 22 80 18 72 26C64 34 72 38 70 32Z" fill="#facc15" opacity="0.6" />
+                        </g>
+                        <g id="obstacleShards"></g>
+                      </g>
+
+                      <g id="puppetSvg" class="puppet-outer" style="transform: translate(27px, 108px);">
+                        <g id="puppetInner" class="puppet-inner">
+                          <image
+                            id="hanumanBody"
+                            href="wayang.png"
+                            x="45"
+                            y="0"
+                            width="90"
+                            height="150"
+                            preserveAspectRatio="xMidYMax meet"
+                          />
+                        </g>
+                      </g>
+                    </svg>
+
+                    <div class="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-10 bg-gradient-to-t from-slate-900/35 to-transparent"></div>
+                    <div
+                      id="stageBanner"
+                      class="pointer-events-none absolute bottom-1.5 left-1/2 z-20 w-[92%] -translate-x-1/2 rounded-xl border-2 border-white/10 bg-slate-900/60 px-3 py-1 text-center text-[11px] md:text-xs font-bold leading-normal text-amber-200 shadow-md backdrop-blur-sm"
+                    >
+                      👋 Welcome, Tok Dalang! Let's build a script on the scroll to guide Hanuman to the Grid 5 Star!
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section id="canvasPane" class="relative overflow-hidden rounded-3xl border-4 border-white/15 shadow-card">
+                <div class="scroll-edge absolute inset-0 opacity-80"></div>
+                <div class="parchment absolute inset-0"></div>
+                <div class="snap-grid absolute inset-0 opacity-75"></div>
+
+                <div class="relative flex flex-col">
+                  <div class="flex items-center justify-between gap-2 px-3 pb-2 pt-3">
+                    <div class="min-w-0">
+                      <div class="font-fredoka text-sm font-extrabold text-slate-900/90">Script Canvas</div>
+                      <div class="text-[11px] font-semibold text-slate-900/65">Stack blocks in order</div>
+                    </div>
+                    <div class="flex shrink-0 items-center gap-2">
+                      <button
+                        id="resetBtn"
+                        class="rounded-2xl border-4 border-slate-900/20 bg-white/60 px-3 py-2 text-[12px] font-extrabold text-slate-900 shadow transition hover:scale-[1.03] active:scale-[0.98]"
+                        type="button"
+                      >
+                        Reset
+                      </button>
+                      <button
+                        id="runBtn"
+                        class="relative overflow-hidden rounded-2xl border-4 border-emerald-900/25 bg-gradient-to-br from-emerald-400 to-lime-300 px-4 py-2 text-[13px] font-extrabold text-emerald-950 shadow-card transition hover:scale-[1.03] active:scale-[0.98]"
+                        type="button"
+                      >
+                        Run ▶
+                      </button>
+                    </div>
+                  </div>
+
+                  <div id="canvasZone" class="relative px-3 pb-3">
+                    <div class="rounded-3xl border-4 border-slate-900/15 bg-white/35 p-3 shadow-inner">
+                      <div class="flex items-center justify-between gap-2">
+                        <div class="text-[11px] font-extrabold text-slate-900/70">Drop Zone</div>
+                        <div class="text-[11px] font-semibold text-slate-900/55">Snap lines help you</div>
+                      </div>
+                      <div id="canvas" class="mt-3 space-y-2"></div>
+                      <div id="errorAnchor" class="relative mt-2 h-1 w-full"></div>
+                    </div>
+                    <div id="toast" class="pointer-events-none absolute left-1/2 top-3 z-50 hidden -translate-x-1/2 rounded-2xl border-4 border-white/30 bg-slate-900/85 px-4 py-2 text-sm font-semibold text-white shadow-card"></div>
+                  </div>
+                </div>
+              </section>
+              
+              <section id="palettePane" class="wood-chest relative overflow-hidden rounded-3xl border-4 border-white/15 shadow-card">
+                <div class="absolute inset-0 wood-grain"></div>
+                <div class="relative flex flex-col px-4 pb-4 pt-3">
+                  <div class="flex items-center justify-between">
+                    <div class="min-w-0">
+                      <div class="font-fredoka text-sm font-extrabold text-white drop-shadow">Block Palette</div>
+                      <div class="text-[11px] font-semibold text-white/80">Drag into the canvas</div>
+                    </div>
+                    <div class="animate-floaty rounded-2xl border-4 border-white/20 bg-white/10 px-2 py-1 text-[11px] font-extrabold text-white/90 shadow-card">🎒</div>
+                  </div>
+                  <div id="paletteHintNotch" class="mt-2 text-[11px] font-semibold text-white/90">
+                    Drag blocks up to the canvas. Notches guide correct snapping.
+                  </div>
+                  <div id="palette" class="mt-3 flex flex-col gap-3"></div>
+                </div>
+              </section>
+              </div>
+            </div>
+
+              <div id="menuModal" class="absolute inset-0 hidden items-center justify-center bg-slate-950/60 p-6">
+                <div class="relative w-full max-w-md rounded-3xl border-4 border-white/15 bg-gradient-to-br from-white/90 to-white/70 p-5 shadow-plush">
+                  <div class="flex items-start justify-between gap-3">
+                    <div>
+                      <div class="font-fredoka text-xl font-extrabold text-slate-900">Level Menu</div>
+                      <div class="mt-1 text-sm font-semibold text-slate-900/70">Choose your next shadow-puppet challenge</div>
+                    </div>
+                    <button id="closeMenu" class="rounded-2xl border-4 border-slate-900/15 bg-white px-3 py-1.5 text-sm font-extrabold text-slate-900 shadow transition hover:scale-[1.03] active:scale-[0.98]" type="button">
+                      ✕
+                    </button>
+                  </div>
+
+                  <div class="mt-4 grid gap-3">
+                    <button class="rounded-3xl border-4 border-emerald-900/15 bg-gradient-to-br from-emerald-300 to-cyan-200 px-4 py-3 text-left shadow-card transition hover:scale-[1.01] active:scale-[0.99]" type="button">
+                      <div class="font-fredoka text-base font-extrabold text-emerald-950">Level 1: Wayang Dance Quest</div>
+                      <div class="text-sm font-semibold text-emerald-950/70">Sequences + a sneaky obstacle</div>
+                    </button>
+                    <button id="comingSoon" class="rounded-3xl border-4 border-slate-900/10 bg-white/70 px-4 py-3 text-left shadow transition hover:scale-[1.01] active:scale-[0.99]" type="button">
+                      <div class="font-fredoka text-base font-extrabold text-slate-900">Level 2: Gamelan Loops</div>
+                      <div class="text-sm font-semibold text-slate-900/65">Coming soon (tap for surprise)</div>
+                    </button>
+                    <button class="rounded-3xl border-4 border-slate-900/10 bg-white/70 px-4 py-3 text-left shadow transition hover:scale-[1.01] active:scale-[0.99]" type="button">
+                      <div class="font-fredoka text-base font-extrabold text-slate-900">Level 3: If-Then Lanterns</div>
+                      <div class="text-sm font-semibold text-slate-900/65">Coming soon</div>
+                    </button>
+                  </div>
+
+                  <div class="mt-4 rounded-2xl border-4 border-slate-900/10 bg-white/70 p-3 text-xs font-semibold text-slate-900/70">
+                    This prototype simulates a guided puzzle flow for screenshots and UX analysis.
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const uid = () => Math.random().toString(16).slice(2) + Date.now().toString(16);
+
+      const ICONS = {
+        move: `
+          <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+            <defs>
+              <linearGradient id="batikStep" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#0ea5e9"/>
+                <stop offset="1" stop-color="#14b8a6"/>
+              </linearGradient>
+            </defs>
+            <path d="M6 16c2-4 6-8 9-8 4 0 6 3 5 7-1 4-5 7-9 7-3 0-6-2-5-6Z" fill="url(#batikStep)" opacity=".95"/>
+            <path d="M8 16c1-2 3-5 5-5 2 0 3 2 2 4-1 3-3 4-5 4-2 0-3-1-2-3Z" fill="#e0f2fe" opacity=".85"/>
+            <path d="M4 19c2 1 4 1 6 0m4 2c2 1 4 1 6 0" fill="none" stroke="#0b1222" stroke-width="2.2" stroke-linecap="round" opacity=".35"/>
+          </svg>
+        `,
+        kris: `
+          <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+            <defs>
+              <linearGradient id="krisBlade" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#c4b5fd"/>
+                <stop offset="1" stop-color="#7c3aed"/>
+              </linearGradient>
+            </defs>
+            <path d="M17 4c-1 3-3 5-2 7 1 2 3 2 2 4-1 2-3 2-2 4 1 2 3 2 2 5" fill="none" stroke="url(#krisBlade)" stroke-width="3.2" stroke-linecap="round"/>
+            <path d="M6 18c3-2 5-4 7-4s4 2 7 4c-2 3-5 4-7 4s-5-1-7-4Z" fill="#0b1222" opacity=".25"/>
+            <path d="M6 18c2-2 4-3 7-3s5 1 7 3c-2 3-5 4-7 4s-5-1-7-4Z" fill="#fde68a" opacity=".9"/>
+            <path d="M10 16h6" stroke="#7c2d12" stroke-width="2.2" stroke-linecap="round" opacity=".65"/>
+          </svg>
+        `,
+        bow: `
+          <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+            <defs>
+              <linearGradient id="bowGlow" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#fde68a"/>
+                <stop offset="1" stop-color="#fb923c"/>
+              </linearGradient>
+            </defs>
+            <circle cx="13" cy="7" r="4" fill="url(#bowGlow)" opacity=".95"/>
+            <path d="M6 22c1-6 4-9 7-9s6 3 7 9" fill="none" stroke="#0b1222" stroke-width="3" stroke-linecap="round" opacity=".35"/>
+            <path d="M7 21c1-5 4-8 6-8s5 3 6 8" fill="none" stroke="url(#bowGlow)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M9 14c2 1 6 1 8 0" fill="none" stroke="#0b1222" stroke-width="2.4" stroke-linecap="round" opacity=".35"/>
+          </svg>
+        `,
+        drum: `
+          <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+            <defs>
+              <linearGradient id="drum" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#fb7185"/>
+                <stop offset="1" stop-color="#ec4899"/>
+              </linearGradient>
+            </defs>
+            <path d="M4 7c0-2 3-4 6-4s6 2 6 4-3 4-6 4-6-2-6-4Z" fill="url(#drum)" opacity=".95"/>
+            <path d="M4 7v7c0 2 3 4 6 4s6-2 6-4V7" fill="url(#drum)" opacity=".85"/>
+            <path d="M6 10h8" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+          </svg>
+        `,
+      };
+
+      const BLOCK_DEFS = {
+        move: {
+          kind: "action",
+          label: "Move Forward",
+          gradient: "from-cyan-400 to-emerald-300",
+          border: "border-slate-900/20",
+          text: "text-slate-900",
+          icon: ICONS.move,
+        },
+        kris: {
+          kind: "action",
+          label: "Raise Kris",
+          gradient: "from-violet-500 to-fuchsia-400",
+          border: "border-white/20",
+          text: "text-white",
+          icon: ICONS.kris,
+        },
+        bow: {
+          kind: "action",
+          label: "Bow",
+          gradient: "from-amber-300 to-orange-400",
+          border: "border-slate-900/15",
+          text: "text-slate-900",
+          icon: ICONS.bow,
+        },
+        loop: {
+          kind: "loop",
+          label: "Gamelan Beat",
+          gradient: "from-rose-600 via-pink-600 to-fuchsia-700",
+          border: "border-rose-950/35",
+          text: "text-amber-100",
+          icon: ICONS.drum,
+        },
+      };
+
+      const state = {
+        program: [],
+        dragging: null,
+        dragGhost: null,
+        activeBar: null,
+        previewEl: null,
+        running: false,
+        runToken: 0,
+        step: 0,
+        krisReady: false,
+        obstacleShattered: false,
+        lastErrorBlockId: null,
+        pointersDown: false,
+      };
+
+      const el = {
+        palette: document.getElementById("palette"),
+        canvas: document.getElementById("canvas"),
+        canvasZone: document.getElementById("canvasZone"),
+        runBtn: document.getElementById("runBtn"),
+        resetBtn: document.getElementById("resetBtn"),
+        toast: document.getElementById("toast"),
+        puppetSvg: document.getElementById("puppetSvg"),
+        stageBanner: document.getElementById("stageBanner"),
+        menuBtn: document.getElementById("menuBtn"),
+        menuModal: document.getElementById("menuModal"),
+        closeMenu: document.getElementById("closeMenu"),
+        comingSoon: document.getElementById("comingSoon"),
+        annoToggle: document.getElementById("annoToggle"),
+        annoToggleWrap: document.getElementById("annoToggleWrap"),
+        headerAnnotationLayer: document.getElementById("headerAnnotationLayer"),
+        annotationLayer: document.getElementById("annotationLayer"),
+        screenScroll: document.getElementById("screenScroll"),
+      };
+
+      function toast(msg) {
+        el.toast.textContent = msg;
+        el.toast.classList.remove("hidden");
+        el.toast.classList.add("animate-pop");
+        clearTimeout(toast._t);
+        toast._t = setTimeout(() => {
+          el.toast.classList.add("hidden");
+          el.toast.classList.remove("animate-pop");
+        }, 1400);
+      }
+
+      function mkBlockButton(type) {
+        const def = BLOCK_DEFS[type];
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className =
+          "block group relative flex min-h-[56px] w-full items-center gap-3 rounded-3xl border-4 px-3 py-2 shadow-card transition hover:-translate-y-0.5 hover:scale-[1.01] active:scale-[0.98] " +
+          def.border +
+          " bg-gradient-to-br " +
+          def.gradient;
+        btn.dataset.blockType = type;
+        btn.innerHTML = `
+          <div class="notch-top absolute left-0 right-0 top-0 h-1"></div>
+          <div class="notch-bottom absolute bottom-0 left-0 right-0 h-1"></div>
+          <div class="flex h-10 w-10 items-center justify-center rounded-2xl border-4 border-white/20 bg-white/15 shadow transition group-hover:scale-105">
+            ${def.icon}
+          </div>
+          <div class="min-w-0 flex-1 text-left">
+            <div class="text-base font-extrabold leading-5 ${def.text} drop-shadow-sm">${def.label}</div>
+            <div class="mt-0.5 text-[11px] font-semibold ${def.text} opacity-85">
+              ${def.kind === "loop" ? "Wrap actions to repeat" : "Tap or drag to the scroll"}
+            </div>
+          </div>
+          <div class="rounded-2xl border-4 border-white/15 bg-white/10 px-2 py-1 text-[11px] font-extrabold ${def.text} opacity-90">+</div>
+        `;
+        btn.addEventListener("pointerdown", (e) => onPointerDownBlock(e, { source: "palette", type }));
+        btn.addEventListener("click", (e) => {
+          if (state.running) return;
+          if (state.pointersDown) return;
+          addFromPalette(type);
+        });
+        return btn;
+      }
+
+      function buildPalette() {
+        const types = ["move", "kris", "bow", "loop"];
+        el.palette.innerHTML = "";
+        for (const t of types) el.palette.appendChild(mkBlockButton(t));
+      }
+
+      function getRootItems() {
+        return state.program;
+      }
+
+      function addFromPalette(type) {
+        if (state.running) return;
+        if (type === "loop") {
+          if (state.program.some((x) => x.kind === "loop")) {
+            toast("Only one Gamelan Beat loop in this level!");
+            return;
+          }
+          state.program.push({ id: uid(), kind: "loop", times: 3, children: [] });
+          render();
+          toast("Loop added! Drop actions inside it.");
+          return;
+        }
+        const loop = state.program.find((x) => x.kind === "loop");
+        if (loop) {
+          loop.children.push({ id: uid(), kind: "action", action: type });
+          render();
+          return;
+        }
+        state.program.push({ id: uid(), kind: "action", action: type });
+        render();
+      }
+
+      function mkInsertBar(pathIndex) {
+        const bar = document.createElement("div");
+        bar.className = "insert-bar";
+        bar.dataset.drop = JSON.stringify(pathIndex);
+        return bar;
+      }
+
+      function mkActionBlock(item, path) {
+        const def = BLOCK_DEFS[item.action];
+        const wrap = document.createElement("div");
+        wrap.className =
+          "block relative flex min-h-[56px] items-center gap-3 rounded-3xl border-4 px-3 py-2 shadow-card transition hover:-translate-y-0.5 hover:scale-[1.01] active:scale-[0.98] " +
+          def.border +
+          " bg-gradient-to-br " +
+          def.gradient;
+        wrap.dataset.blockId = item.id;
+        wrap.dataset.path = JSON.stringify(path);
+        wrap.innerHTML = `
+          <div class="notch-top absolute left-0 right-0 top-0 h-1"></div>
+          <div class="notch-bottom absolute bottom-0 left-0 right-0 h-1"></div>
+          <div class="flex h-10 w-10 items-center justify-center rounded-2xl border-4 border-white/20 bg-white/15 shadow">
+            ${def.icon}
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="text-base font-extrabold leading-5 ${def.text} drop-shadow-sm">${def.label}</div>
+            <div class="mt-0.5 text-[11px] font-semibold ${def.text} opacity-85">Drag to reorder</div>
+          </div>
+          <button class="removeBtn rounded-2xl border-4 border-white/15 bg-white/10 px-2 py-1 text-xs font-extrabold ${def.text} opacity-90 transition hover:scale-[1.04] active:scale-[0.98]" type="button">✕</button>
+        `;
+        const source = path.scope === "loop" ? "canvasLoopAction" : "canvasRootAction";
+        wrap.addEventListener("pointerdown", (e) => onPointerDownBlock(e, { source, path }));
+        wrap.querySelector(".removeBtn").addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (state.running) return;
+          removeAtPath(path);
+        });
+        return wrap;
+      }
+
+      function mkLoopBlock(loopItem, path) {
+        const def = BLOCK_DEFS.loop;
+        const wrap = document.createElement("div");
+        wrap.className =
+          "relative rounded-3xl border-4 bg-gradient-to-br p-3 shadow-card " +
+          def.border +
+          " " +
+          def.gradient;
+        wrap.dataset.blockId = loopItem.id;
+        wrap.dataset.path = JSON.stringify(path);
+
+        const head = document.createElement("div");
+        head.className = "flex items-center justify-between gap-3";
+        head.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-2xl border-4 border-white/20 bg-white/15 shadow">
+              ${def.icon}
+            </div>
+            <div>
+              <div class="text-base font-extrabold text-white drop-shadow-sm">Gamelan Beat</div>
+              <div class="text-[11px] font-extrabold text-amber-100/95">A magical bracelet that repeats your dance</div>
+            </div>
+          </div>
+          <button class="removeLoop rounded-2xl border-4 border-white/15 bg-white/10 px-2 py-1 text-xs font-extrabold text-white/90 shadow transition hover:scale-[1.04] active:scale-[0.98]" type="button">✕</button>
+        `;
+        head.querySelector(".removeLoop").addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (state.running) return;
+          state.program = state.program.filter((x) => x.id !== loopItem.id);
+          render();
+        });
+
+        const inputRow = document.createElement("div");
+        inputRow.className = "mt-3 flex flex-wrap items-center gap-2 rounded-3xl border-4 border-white/20 bg-white/10 px-3 py-2";
+        inputRow.innerHTML = `
+          <div class="flex items-center gap-2 text-sm font-extrabold text-white">
+            <span class="inline-flex items-center justify-center">${ICONS.drum}</span>
+            <span>Repeat</span>
+          </div>
+          <input
+            class="w-16 rounded-2xl border-4 border-white/20 bg-white/85 px-2 py-1 text-center text-sm font-extrabold text-slate-900 shadow-inner outline-none focus:border-amber-300"
+            min="1"
+            max="9"
+            step="1"
+            inputmode="numeric"
+            type="number"
+            value="${loopItem.times}"
+            aria-label="Repeat times"
+          />
+          <div class="text-sm font-extrabold text-white">times</div>
+          <div class="ml-auto text-[11px] font-extrabold text-amber-100/95">Drop actions inside</div>
+        `;
+        const input = inputRow.querySelector("input");
+        input.addEventListener("input", () => {
+          loopItem.times = Math.max(1, Math.min(9, parseInt(input.value || "1", 10)));
+          input.value = loopItem.times;
+        });
+
+        const inner = document.createElement("div");
+        inner.className = "mt-3 rounded-3xl border-4 border-white/20 bg-white/10 p-2";
+
+        const innerList = document.createElement("div");
+        innerList.className = "space-y-2";
+
+        inner.appendChild(innerList);
+
+        const endBoundary = document.createElement("div");
+        endBoundary.className = "insert-bar end-loop-bar mt-3 relative";
+        endBoundary.dataset.drop = JSON.stringify({ scope: "root", index: path.index + 1 });
+        endBoundary.innerHTML = `
+          <div class="notch-top absolute left-3 right-3 top-0 h-1"></div>
+          <div class="notch-bottom absolute bottom-0 left-3 right-3 h-1"></div>
+          <div class="flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <div class="text-[13px] font-extrabold text-white drop-shadow-sm">🛑 End of Gamelan Beat Loop</div>
+              <div class="mt-0.5 text-[11px] font-extrabold text-amber-100/95">Drop blocks below to continue outside the loop</div>
+            </div>
+            <div class="shrink-0 rounded-2xl border-4 border-white/20 bg-white/10 px-2 py-1 text-[11px] font-extrabold text-white/90 shadow">⇩</div>
+          </div>
+        `;
+
+        wrap.appendChild(head);
+        wrap.appendChild(inputRow);
+        wrap.appendChild(inner);
+        wrap.appendChild(endBoundary);
+
+        return { wrap, innerList };
+      }
+
+      function removeAtPath(path) {
+        if (path.scope === "root") {
+          state.program.splice(path.index, 1);
+        } else {
+          const loop = state.program.find((x) => x.id === path.loopId);
+          if (!loop) return;
+          loop.children.splice(path.index, 1);
+        }
+        render();
+      }
+
+      function render() {
+        clearError();
+        el.canvas.innerHTML = "";
+        const items = getRootItems();
+        el.canvas.appendChild(mkInsertBar({ scope: "root", index: 0 }));
+        for (let i = 0; i < items.length; i++) {
+          const it = items[i];
+          if (it.kind === "loop") {
+            const { wrap, innerList } = mkLoopBlock(it, { scope: "root", index: i });
+            el.canvas.appendChild(wrap);
+
+            innerList.innerHTML = "";
+            const innerItems = it.children;
+            for (let j = 0; j < innerItems.length; j++) {
+              innerList.appendChild(mkInsertBar({ scope: "loop", loopId: it.id, index: j }));
+              innerList.appendChild(mkActionBlock(innerItems[j], { scope: "loop", loopId: it.id, index: j }));
+            }
+            innerList.appendChild(mkInsertBar({ scope: "loop", loopId: it.id, index: innerItems.length }));
+            if (innerItems.length === 0) {
+              const empty = document.createElement("div");
+              empty.className = "rounded-3xl border-4 border-dashed border-white/25 bg-white/10 px-4 py-6 text-center text-sm font-bold text-white/80";
+              empty.textContent = "Drop actions here ✨";
+              innerList.appendChild(empty);
+            }
+          } else {
+            el.canvas.appendChild(mkActionBlock(it, { scope: "root", index: i }));
+          }
+          el.canvas.appendChild(mkInsertBar({ scope: "root", index: i + 1 }));
+        }
+
+        if (items.length === 0) {
+          const empty = document.createElement("div");
+          empty.className = "rounded-3xl border-4 border-dashed border-slate-900/25 bg-white/35 px-4 py-6 text-center text-sm font-bold text-slate-900/70";
+          empty.textContent = "Drag blocks here to start your dance script!";
+          el.canvas.appendChild(empty);
+        }
+      }
+
+      function onPointerDownBlock(e, info) {
+        if (state.running) return;
+        if (e.button !== 0) return;
+        state.pointersDown = true;
+        setTimeout(() => (state.pointersDown = false), 0);
+        const startX = e.clientX;
+        const startY = e.clientY;
+        const threshold = 6;
+        let moved = false;
+
+        const blockType = info.source === "palette" ? info.type : null;
+        const path = info.path || null;
+
+        const onMove = (ev) => {
+          const dx = ev.clientX - startX;
+          const dy = ev.clientY - startY;
+          if (!moved && Math.hypot(dx, dy) > threshold) {
+            moved = true;
+            startDrag(ev, { source: info.source, type: blockType, path });
+          }
+          if (moved) dragMove(ev);
+        };
+
+        const onUp = (ev) => {
+          window.removeEventListener("pointermove", onMove);
+          window.removeEventListener("pointerup", onUp);
+          if (moved) endDrag(ev);
+        };
+
+        window.addEventListener("pointermove", onMove);
+        window.addEventListener("pointerup", onUp);
+      }
+
+      function mkGhostFromDef(type) {
+        const def = BLOCK_DEFS[type];
+        const ghost = document.createElement("div");
+        ghost.className =
+          "drag-ghost w-[260px] rounded-3xl border-4 px-3 py-2 shadow-glow " +
+          def.border +
+          " bg-gradient-to-br " +
+          def.gradient;
+        ghost.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-2xl border-4 border-white/20 bg-white/15 shadow">
+              ${def.icon}
+            </div>
+            <div class="text-base font-extrabold ${def.text} drop-shadow-sm">${def.label}</div>
+          </div>
+        `;
+        return ghost;
+      }
+
+      function getItemAtPath(path) {
+        if (!path) return null;
+        if (path.scope === "root") return state.program[path.index] || null;
+        const loop = state.program.find((x) => x.id === path.loopId);
+        if (!loop) return null;
+        return loop.children[path.index];
+      }
+
+      function startDrag(e, payload) {
+        clearActiveBar();
+        clearError();
+        const ghost =
+          payload.source === "palette"
+            ? mkGhostFromDef(payload.type)
+            : (() => {
+                const item = getItemAtPath(payload.path);
+                if (!item) return null;
+                if (item.kind === "loop") return mkGhostFromDef("loop");
+                return mkGhostFromDef(item.action);
+              })();
+        if (!ghost) return;
+        state.dragGhost = ghost;
+        state.dragging = payload;
+        document.body.appendChild(ghost);
+        ghost.style.left = e.clientX + "px";
+        ghost.style.top = e.clientY + "px";
+        ghost.classList.add("animate-pop");
+      }
+
+      function dragMove(e) {
+        if (!state.dragGhost) return;
+        state.dragGhost.style.left = e.clientX + "px";
+        state.dragGhost.style.top = e.clientY + "px";
+
+        const bars = Array.from(document.querySelectorAll(".insert-bar"));
+        let best = null;
+        for (const bar of bars) {
+          const r = bar.getBoundingClientRect();
+          const cx = r.left + r.width / 2;
+          const cy = r.top + r.height / 2;
+          const d = Math.hypot(cx - e.clientX, cy - e.clientY);
+          if (!best || d < best.d) best = { d, bar };
+        }
+        if (!best) return;
+        setActiveBar(best.bar);
+      }
+
+      function clearActiveBar() {
+        if (state.activeBar) state.activeBar.classList.remove("active");
+        state.activeBar = null;
+        if (state.previewEl) state.previewEl.remove();
+        state.previewEl = null;
+      }
+
+      function setActiveBar(bar) {
+        if (state.activeBar === bar) return;
+        clearActiveBar();
+        state.activeBar = bar;
+        bar.classList.add("active");
+        state.previewEl = makeDropPreview();
+        if (state.previewEl) bar.insertAdjacentElement("afterend", state.previewEl);
+      }
+
+      function endDrag() {
+        if (!state.dragging) return cleanupDrag();
+        const target = state.activeBar;
+        if (!target) return cleanupDrag();
+        const drop = JSON.parse(target.dataset.drop);
+        const ok = applyDrop(drop);
+        cleanupDrag();
+        if (!ok) toast("Those puzzle slots don't match yet!");
+      }
+
+      function cleanupDrag() {
+        clearActiveBar();
+        if (state.dragGhost) state.dragGhost.remove();
+        state.dragGhost = null;
+        state.dragging = null;
+      }
+
+      function applyDropLegacy(drop) {
+        if (!state.dragging) return false;
+
+        const drag = state.dragging;
+        const loop = state.program.find((x) => x.kind === "loop");
+
+        if (drag.source === "palette") {
+          if (drag.type === "loop") {
+            if (state.program.some((x) => x.kind === "loop")) return false;
+            if (drop.scope !== "loop") return false;
+            state.program.push({ id: uid(), kind: "loop", times: 3, children: [] });
+            render();
+            return true;
+          }
+          if (drop.scope === "loop") {
+            if (!loop) return false;
+            if (!isAllowedActionAt(drop, drag.type)) return false;
+            loop.children.splice(drop.index, 0, { id: uid(), kind: "action", action: drag.type });
+            render();
+            return true;
+          }
+          if (!isAllowedActionAt(drop, drag.type)) return false;
+          state.program.splice(drop.index, 0, { id: uid(), kind: "action", action: drag.type });
+          render();
+          return true;
+        }
+
+        if (drag.source === "canvasLoop") return false;
+
+        if (drag.source === "canvas") {
+          const item = getItemAtPath(drag.path);
+          if (!item) return false;
+          if (item.kind === "loop") return false;
+          if (drop.scope === "loop") return false;
+          const from = drag.path.index;
+          let to = drop.index;
+          if (to > from) to -= 1;
+          const moved = state.program.splice(from, 1)[0];
+          if (!isAllowedActionAt({ scope: "root", index: to }, moved.action, moved.id)) {
+            state.program.splice(from, 0, moved);
+            render();
+            return false;
+          }
+          state.program.splice(to, 0, moved);
+          render();
+          return true;
+        }
+
+        if (drag.source === "canvas" || drag.source === "canvasLoop") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvasBlock") return false;
+
+        if (drag.source === "canvasInner") return false;
+
+        if (drag.source === "canvasLoopBlock") return false;
+
+        if (drag.source === "canvasItem") return false;
+
+        if (drag.source === "canvasAction") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvasLoopAction") return false;
+
+        if (drag.source === "canvasLoopChild") return false;
+
+        if (drag.source === "canvasLoopItem") return false;
+
+        if (drag.source === "canvasChildren") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvasBlock") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvasLoopChild") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvasLoop") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        if (drag.source === "canvas") return false;
+
+        return false;
+      }
+
+      function applyDrop(drop) {
+        if (!state.dragging) return false;
+
+        const drag = state.dragging;
+        const loop = state.program.find((x) => x.kind === "loop");
+
+        if (drag.source === "palette") {
+          if (drag.type === "loop") {
+            if (loop) return false;
+            if (drop.scope !== "root") return false;
+            state.program.splice(drop.index, 0, { id: uid(), kind: "loop", times: 3, children: [] });
+            render();
+            return true;
+          }
+
+          if (drop.scope === "loop") {
+            if (!loop || loop.id !== drop.loopId) return false;
+            if (!isAllowedActionAt(drop, drag.type)) return false;
+            loop.children.splice(drop.index, 0, { id: uid(), kind: "action", action: drag.type });
+            render();
+            return true;
+          }
+
+          if (!isAllowedActionAt(drop, drag.type)) return false;
+          state.program.splice(drop.index, 0, { id: uid(), kind: "action", action: drag.type });
+          render();
+          return true;
+        }
+
+        if (drag.source === "canvasRootAction") {
+          if (drop.scope !== "root") return false;
+          const from = drag.path.index;
+          let to = drop.index;
+          if (to > from) to -= 1;
+          const moved = state.program.splice(from, 1)[0];
+          if (!moved) return false;
+          if (moved.kind !== "action") {
+            state.program.splice(from, 0, moved);
+            render();
+            el.canvasZone.classList.add("animate-jiggle");
+            setTimeout(() => el.canvasZone.classList.remove("animate-jiggle"), 550);
+            return false;
+          }
+          if (!isAllowedActionAt({ scope: "root", index: to }, moved.action, moved.id)) {
+            state.program.splice(from, 0, moved);
+            render();
+            el.canvasZone.classList.add("animate-jiggle");
+            setTimeout(() => el.canvasZone.classList.remove("animate-jiggle"), 550);
+            return false;
+          }
+          state.program.splice(to, 0, moved);
+          render();
+          return true;
+        }
+
+        if (drag.source === "canvasLoopAction") {
+          if (drop.scope !== "loop") return false;
+          if (!loop || loop.id !== drop.loopId) return false;
+          const from = drag.path.index;
+          let to = drop.index;
+          if (to > from) to -= 1;
+          const moved = loop.children.splice(from, 1)[0];
+          if (!isAllowedActionAt({ scope: "loop", loopId: loop.id, index: to }, moved.action, moved.id)) {
+            loop.children.splice(from, 0, moved);
+            render();
+            el.canvasZone.classList.add("animate-jiggle");
+            setTimeout(() => el.canvasZone.classList.remove("animate-jiggle"), 550);
+            return false;
+          }
+          loop.children.splice(to, 0, moved);
+          render();
+          return true;
+        }
+
+        return false;
+      }
+
+      function makeDropPreview() {
+        if (!state.dragging || !state.activeBar) return null;
+        const drop = JSON.parse(state.activeBar.dataset.drop || "null");
+        if (!drop) return null;
+
+        const drag = state.dragging;
+        const loop = state.program.find((x) => x.kind === "loop");
+
+        const type =
+          drag.source === "palette"
+            ? drag.type
+            : (() => {
+                const item = getItemAtPath(drag.path);
+                if (!item) return null;
+                return item.kind === "loop" ? "loop" : item.action;
+              })();
+        if (!type) return null;
+
+        if (type === "loop") {
+          if (drop.scope !== "root" || loop) return null;
+          const frame = document.createElement("div");
+          frame.className =
+            "drop-preview rounded-3xl border-4 border-fuchsia-200/80 bg-fuchsia-200/10 p-4 text-center text-sm font-extrabold text-fuchsia-950/80";
+          frame.textContent = "Shadow Outline Preview: Loop Container";
+          return frame;
+        }
+
+        if (drop.scope === "loop" && (!loop || loop.id !== drop.loopId)) return null;
+
+        const def = BLOCK_DEFS[type];
+        const ph = document.createElement("div");
+        ph.className = "drop-preview relative flex min-h-[56px] items-center gap-3 rounded-3xl border-4 px-3 py-2 " + def.border;
+        ph.innerHTML = `
+          <div class="flex h-10 w-10 items-center justify-center rounded-2xl border-4 border-white/20 bg-white/25 shadow">
+            ${def.icon}
+          </div>
+          <div class="text-base font-extrabold ${def.text} opacity-80">${def.label}</div>
+        `;
+        return ph;
+      }
+
+      function isAllowedActionAt(drop, action, movingId = null) {
+        const program = JSON.parse(JSON.stringify(state.program));
+        const loop = program.find((x) => x.kind === "loop");
+
+        if (movingId) {
+          const ix = program.findIndex((x) => x.id === movingId);
+          if (ix !== -1) program.splice(ix, 1);
+          if (loop) loop.children = loop.children.filter((x) => x.id !== movingId);
+        }
+
+        if (drop.scope === "loop") {
+          if (!loop || loop.id !== drop.loopId) return false;
+          loop.children.splice(drop.index, 0, { id: movingId || "new", kind: "action", action });
+        } else {
+          program.splice(drop.index, 0, { id: movingId || "new", kind: "action", action });
+        }
+
+        const flat = expandActionsFromProgram(program);
+        return validateFlatSequence(flat).ok;
+      }
+
+      function validateFlatSequence(actions) {
+        if (!actions || actions.length === 0) return { ok: true, errorIndex: -1, msg: "" };
+        if (actions[0].action !== "move") return { ok: false, errorIndex: 0, msg: "Start with Move Forward to begin your script!" };
+        const bowIdx = [];
+        for (let i = 0; i < actions.length; i++) if (actions[i].action === "bow") bowIdx.push(i);
+        if (bowIdx.length > 1) return { ok: false, errorIndex: bowIdx[1], msg: "Only one Bow is allowed in this level!" };
+        if (bowIdx.length === 1 && bowIdx[0] !== actions.length - 1) return { ok: false, errorIndex: bowIdx[0], msg: "Bow must be the very last block!" };
+        return { ok: true, errorIndex: -1, msg: "" };
+      }
+
+      function expandActionsFromProgram(program) {
+        const result = [];
+        for (const it of program) {
+          if (it.kind === "loop") {
+            for (let r = 0; r < it.times; r++) {
+              for (let i = 0; i < it.children.length; i++) {
+                const a = it.children[i];
+                result.push({ action: a.action });
+              }
+            }
+            continue;
+          }
+          result.push({ action: it.action });
+        }
+        return result;
+      }
+
+      function expandActionsWithRefs() {
+        const result = [];
+        for (const it of state.program) {
+          if (it.kind === "loop") {
+            for (let r = 0; r < it.times; r++) {
+              for (let i = 0; i < it.children.length; i++) {
+                const a = it.children[i];
+                result.push({ action: a.action, blockId: a.id });
+              }
+            }
+            continue;
+          }
+          result.push({ action: it.action, blockId: it.id });
+        }
+        return result;
+      }
+
+      function clearError() {
+        const blocks = Array.from(document.querySelectorAll(".block-error"));
+        for (const elBlock of blocks) {
+          elBlock.classList.remove("block-error", "animate-jiggle");
+          const bubble = elBlock.querySelector(".errBubble");
+          if (bubble) bubble.remove();
+        }
+        state.lastErrorBlockId = null;
+      }
+
+      function markError(blockId, msg) {
+        state.lastErrorBlockId = blockId;
+        const elBlock = document.querySelector(`[data-block-id="${blockId}"]`);
+        if (!elBlock) return;
+        elBlock.classList.add("block-error", "animate-jiggle");
+        const bubble = document.createElement("div");
+        bubble.className =
+          "errBubble absolute -right-3 -top-3 flex h-9 w-9 items-center justify-center rounded-2xl border-4 border-white/30 bg-gradient-to-br from-amber-300 to-orange-500 text-lg font-extrabold text-slate-900 shadow-card";
+        bubble.textContent = "!";
+        elBlock.appendChild(bubble);
+        el.stageBanner.textContent = msg;
+        toast(msg);
+      }
+
+      function setRunningUI(on) {
+        state.running = on;
+        el.runBtn.disabled = on;
+        el.resetBtn.classList.toggle("opacity-80", on);
+        el.runBtn.classList.toggle("opacity-70", on);
+        el.runBtn.classList.toggle("cursor-not-allowed", on);
+      }
+
+      function makePulseRing(targetBtn) {
+        const r = targetBtn.getBoundingClientRect();
+        const ring = document.createElement("div");
+        ring.className = "pointer-events-none fixed left-0 top-0 z-[9998] h-16 w-16 rounded-full border-4 border-emerald-200/80 bg-emerald-200/10 animate-pulseRing";
+        ring.style.left = r.left + r.width / 2 + "px";
+        ring.style.top = r.top + r.height / 2 + "px";
+        ring.style.transform = "translate(-50%, -50%)";
+        document.body.appendChild(ring);
+        setTimeout(() => ring.remove(), 950);
+      }
+
+      function playGamelanChime() {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const master = ctx.createGain();
+        master.gain.value = 0.13;
+        master.connect(ctx.destination);
+        const now = ctx.currentTime;
+        const freqs = [440, 660, 880, 990];
+        freqs.forEach((f, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.value = f;
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.exponentialRampToValueAtTime(0.18 / (i + 1), now + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.55 + i * 0.03);
+          osc.connect(gain);
+          gain.connect(master);
+          osc.start(now + i * 0.03);
+          osc.stop(now + 0.62 + i * 0.03);
+        });
+        setTimeout(() => ctx.close(), 900);
+      }
+
+      function setPuppetPos(step) {
+        const centers = [117, 232, 347, 462, 577];
+        const idx = Math.max(0, Math.min(step, 4));
+        const x = centers[idx] - 90;
+        const y = 108;
+        el.puppetSvg.style.transform = `translate(${x}px, ${y}px)`;
+      }
+
+      function puppetAnim(kind) {
+        const inner = document.getElementById("puppetInner");
+        if (!inner) return;
+        inner.classList.remove("puppet-inner-dance", "puppet-inner-raise", "puppet-inner-bow", "puppet-inner-shake");
+        if (kind === "dance") inner.classList.add("puppet-inner-dance");
+        if (kind === "raise") inner.classList.add("puppet-inner-raise");
+        if (kind === "bow") inner.classList.add("puppet-inner-bow");
+        if (kind === "shake") inner.classList.add("puppet-inner-shake");
+      }
+
+      function restoreObstacle() {
+        const core = document.getElementById("obstacleCore");
+        const shards = document.getElementById("obstacleShards");
+        core?.classList.remove("rock-hidden", "rock-shake");
+        if (shards) shards.innerHTML = "";
+        state.obstacleShattered = false;
+      }
+
+      function shatterObstacle() {
+        if (state.obstacleShattered) return;
+        state.obstacleShattered = true;
+
+        const core = document.getElementById("obstacleCore");
+        const shards = document.getElementById("obstacleShards");
+        if (!core || !shards) return;
+
+        core.classList.add("rock-shake");
+        setTimeout(() => core.classList.remove("rock-shake"), 160);
+
+        setTimeout(() => {
+          core.classList.add("rock-hidden");
+        }, 150);
+
+        const ns = "http://www.w3.org/2000/svg";
+        const count = 8 + Math.floor(Math.random() * 5);
+        const colors = ["#8b5a2b", "#6b3f1f", "#9a6b3a", "#4b5563", "#a16207"];
+
+        for (let i = 0; i < count; i++) {
+          const frag = document.createElementNS(ns, "polygon");
+          const cx = 45;
+          const cy = 40;
+          const r = 6 + Math.random() * 9;
+          const a = Math.random() * Math.PI * 2;
+          const p1 = [cx + Math.cos(a) * r, cy + Math.sin(a) * r];
+          const p2 = [cx + Math.cos(a + 2.1) * (r * (0.7 + Math.random() * 0.5)), cy + Math.sin(a + 2.1) * (r * (0.7 + Math.random() * 0.5))];
+          const p3 = [cx + Math.cos(a + 4.2) * (r * (0.7 + Math.random() * 0.5)), cy + Math.sin(a + 4.2) * (r * (0.7 + Math.random() * 0.5))];
+          frag.setAttribute("points", `${p1[0].toFixed(1)},${p1[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)} ${p3[0].toFixed(1)},${p3[1].toFixed(1)}`);
+          frag.setAttribute("fill", colors[i % colors.length]);
+          frag.setAttribute("opacity", "0.95");
+          frag.setAttribute("stroke", "rgba(17,24,39,0.35)");
+          frag.setAttribute("stroke-width", "1.4");
+          frag.classList.add("rock-shard");
+
+          const dx = Math.round((Math.random() * 2 - 1) * 110);
+          const dy = Math.round((Math.random() * 2 - 1) * 90);
+          const rot = Math.round((Math.random() * 2 - 1) * 180);
+          frag.style.setProperty("--dx", dx + "px");
+          frag.style.setProperty("--dy", dy + "px");
+          frag.style.setProperty("--rot", rot + "deg");
+
+          shards.appendChild(frag);
+          setTimeout(() => frag.remove(), 650);
+        }
+      }
+
+      function sparkleConfetti() {
+        const stage = document.getElementById("stage");
+        const colors = ["#34d399", "#fbbf24", "#fb7185", "#60a5fa", "#a78bfa"];
+        for (let i = 0; i < 18; i++) {
+          const c = document.createElement("div");
+          c.className = "confetti";
+          c.style.left = 35 + Math.random() * 45 + "%";
+          c.style.top = 40 + Math.random() * 8 + "%";
+          c.style.background = colors[i % colors.length];
+          c.style.transform = `translateY(0) rotate(${Math.random() * 120}deg)`;
+          stage.appendChild(c);
+          setTimeout(() => c.remove(), 980);
+        }
+      }
+
+      async function runProgram() {
+        clearError();
+        const steps = expandActionsWithRefs();
+        if (steps.length === 0) {
+          toast("Add at least one block to run!");
+          return;
+        }
+        const v = validateFlatSequence(steps);
+        if (!v.ok) {
+          const id = steps[Math.max(0, v.errorIndex)]?.blockId || steps[0].blockId;
+          markError(id, v.msg);
+          return;
+        }
+        const token = ++state.runToken;
+        const stepInterval = 550;
+        const obstacleAt = 2;
+
+        state.step = 0;
+        state.krisReady = false;
+
+        setRunningUI(true);
+        playGamelanChime();
+        makePulseRing(el.runBtn);
+        makePulseRing(el.runBtn);
+
+        el.stageBanner.textContent = "Gamelan chime... Hanuman is ready!";
+        setPuppetPos(state.step);
+        puppetAnim("dance");
+
+        const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+        try {
+          for (let i = 0; i < steps.length; i++) {
+            await sleep(stepInterval);
+            if (token !== state.runToken) return;
+
+            const s = steps[i];
+
+            if (s.action === "kris") {
+              state.krisReady = true;
+              puppetAnim("raise");
+              el.stageBanner.textContent =
+                "🗡️ Magic Kris Dagger Raised! This gives Hanuman the divine power to fly over any obstacle on his next move!";
+              continue;
+            }
+
+            if (s.action === "bow") {
+              puppetAnim("bow");
+              el.stageBanner.textContent = "🙇 A respectful Bow to the audience! What beautiful traditional stage manners.";
+              continue;
+            }
+
+            if (s.action === "move") {
+              const next = state.step + 1;
+              puppetAnim("dance");
+
+              if (next === obstacleAt && !state.krisReady) {
+                const msg =
+                  "❌ CRASH! Hanuman hit the Sacred Rock! Remember: You need to add a purple 'Raise Kris' block on Grid 2 *before* moving into Grid 3 so he can fly over it!";
+                puppetAnim("shake");
+                markError(s.blockId, msg);
+                return;
+              }
+
+              if (next === obstacleAt && state.krisReady) {
+                state.krisReady = false;
+                shatterObstacle();
+              }
+
+              state.step = next;
+              setPuppetPos(state.step);
+              el.stageBanner.textContent = "🏃 Hanuman dances 1 grid cell forward!";
+            }
+          }
+
+          await sleep(stepInterval);
+          if (token !== state.runToken) return;
+
+          if (state.step >= 4 && steps[steps.length - 1].action === "bow") {
+            el.stageBanner.textContent = "Level Complete! Hanuman celebrates your perfect script!";
+            sparkleConfetti();
+          } else if (state.step >= 4) {
+            el.stageBanner.textContent = "So close! Add a final Bow on Grid 5 to finish with respect.";
+            toast("Add a Bow at the end to complete the quest!");
+          } else {
+            el.stageBanner.textContent = "Need more moves! Reach Grid 5 to reach the Star!";
+            toast("Add more Move Forward blocks to cross the stage.");
+          }
+        } finally {
+          if (token === state.runToken) setRunningUI(false);
+        }
+      }
+
+      function wait(ms) {
+        return new Promise((r) => setTimeout(r, ms));
+      }
+
+      function resetAll() {
+        clearError();
+        setRunningUI(false);
+        restoreObstacle();
+        el.stageBanner.textContent = "👋 Welcome, Tok Dalang! Let's build a script on the scroll to guide Hanuman to the Grid 5 Star!";
+        setPuppetPos(0);
+        setTimeout(() => puppetAnim("dance"), 50);
+      }
+
+      function repositionAnnotations() {
+        const margin = 10;
+
+        const placeInLayer = (layer, bounds, getTargetBox) => {
+          const placed = [];
+          for (const bubble of layer.querySelectorAll(".speech-bubble")) {
+            const t = getTargetBox(bubble);
+            if (!t) continue;
+
+            bubble.style.left = margin + "px";
+            bubble.style.top = margin + "px";
+
+            const bw = bubble.offsetWidth;
+            const bh = bubble.offsetHeight;
+
+            const x = clamp(t.cx - bw / 2, margin, bounds.w - bw - margin);
+            const candidates = [
+              { y: t.top - bh - 14, pointer: "pointer-bottom" },
+              { y: t.bottom + 14, pointer: "pointer-top" },
+            ];
+
+            let chosen = null;
+            for (const c of candidates) {
+              let y = clamp(c.y, margin, bounds.h - bh - margin);
+              let tries = 0;
+              while (tries < 28 && placed.some((p) => intersects({ x, y, w: bw, h: bh }, p))) {
+                y += 14;
+                if (y > bounds.h - bh - margin) break;
+                tries++;
+              }
+              if (!placed.some((p) => intersects({ x, y, w: bw, h: bh }, p))) {
+                chosen = { x, y, pointer: c.pointer };
+                break;
+              }
+            }
+            if (!chosen) chosen = { x, y: clamp(margin + placed.length * (bh + 12), margin, bounds.h - bh - margin), pointer: "pointer-top" };
+
+            bubble.classList.remove("pointer-top", "pointer-bottom");
+            bubble.classList.add(chosen.pointer);
+            bubble.style.left = chosen.x + "px";
+            bubble.style.top = chosen.y + "px";
+            bubble.style.setProperty("--tailLeft", clamp(t.cx - chosen.x - 8, 16, bw - 30) + "px");
+
+            placed.push({ x: chosen.x, y: chosen.y, w: bw, h: bh });
+          }
+        };
+
+        if (el.headerAnnotationLayer && !el.headerAnnotationLayer.classList.contains("hidden")) {
+          const r = el.headerAnnotationLayer.getBoundingClientRect();
+          placeInLayer(
+            el.headerAnnotationLayer,
+            { w: r.width, h: r.height },
+            (bubble) => {
+              const targetEl = document.getElementById(bubble.dataset.target || "");
+              if (!targetEl) return null;
+              const t = targetEl.getBoundingClientRect();
+              return { cx: t.left + t.width / 2 - r.left, top: t.top - r.top, bottom: t.bottom - r.top };
+            }
+          );
+        }
+
+        if (el.annotationLayer && el.screenScroll && !el.annotationLayer.classList.contains("hidden")) {
+          const scroll = el.screenScroll;
+          const scrollRect = scroll.getBoundingClientRect();
+          el.annotationLayer.style.height = scroll.scrollHeight + "px";
+          placeInLayer(
+            el.annotationLayer,
+            { w: scroll.clientWidth, h: scroll.scrollHeight },
+            (bubble) => {
+              let targetEl = document.getElementById(bubble.dataset.target || "");
+              if (bubble.dataset.bubble === "loop") targetEl = document.querySelector("[data-block-type='loop']") || targetEl;
+              if (!targetEl) return null;
+              const t = targetEl.getBoundingClientRect();
+              const top = t.top - scrollRect.top + scroll.scrollTop;
+              const bottom = t.bottom - scrollRect.top + scroll.scrollTop;
+              const cx = t.left + t.width / 2 - scrollRect.left + scroll.scrollLeft;
+              return { cx, top, bottom };
+            }
+          );
+        }
+      }
+
+      function toggleAnnotations(on) {
+        el.headerAnnotationLayer?.classList.toggle("hidden", !on);
+        el.annotationLayer.classList.toggle("hidden", !on);
+        if (on) {
+          requestAnimationFrame(() => {
+            repositionAnnotations();
+            requestAnimationFrame(() => repositionAnnotations());
+          });
+        }
+      }
+
+      function clamp(v, lo, hi) {
+        return Math.max(lo, Math.min(hi, v));
+      }
+
+      function intersects(a, b) {
+        return !(a.x + a.w <= b.x || b.x + b.w <= a.x || a.y + a.h <= b.y || b.y + b.h <= a.y);
+      }
+
+      el.runBtn.addEventListener("click", () => runProgram());
+      el.resetBtn.addEventListener("click", () => {
+        state.runToken += 1;
+        setRunningUI(false);
+        clearError();
+        cleanupDrag();
+        el.canvasZone.classList.remove("animate-jiggle");
+        state.step = 0;
+        state.krisReady = false;
+        restoreObstacle();
+        const inner = document.getElementById("puppetInner");
+        inner?.classList.remove("puppet-inner-dance", "puppet-inner-raise", "puppet-inner-bow", "puppet-inner-shake");
+        state.program = [];
+        render();
+        resetAll();
+        toast("Reset! Build a fresh script.");
+      });
+
+      el.menuBtn.addEventListener("click", () => {
+        el.menuModal.classList.remove("hidden");
+        el.menuModal.classList.add("flex");
+      });
+      el.closeMenu.addEventListener("click", () => {
+        el.menuModal.classList.add("hidden");
+        el.menuModal.classList.remove("flex");
+      });
+      el.menuModal.addEventListener("click", (e) => {
+        if (e.target === el.menuModal) {
+          el.menuModal.classList.add("hidden");
+          el.menuModal.classList.remove("flex");
+        }
+      });
+      el.comingSoon.addEventListener("click", () => {
+        toast("✨ Surprise! Add a Loop and repeat your moves!");
+        el.menuModal.classList.add("hidden");
+        el.menuModal.classList.remove("flex");
+      });
+
+      el.annoToggle.addEventListener("change", () => toggleAnnotations(el.annoToggle.checked));
+      el.annoToggleWrap?.addEventListener("pointerdown", (e) => {
+        e.stopPropagation();
+      });
+      window.addEventListener("resize", () => {
+        if (!el.annotationLayer.classList.contains("hidden")) {
+          repositionAnnotations();
+        }
+      });
+
+      buildPalette();
+      state.program = [
+        { id: uid(), kind: "action", action: "move" },
+        { id: uid(), kind: "action", action: "kris" },
+      ];
+      render();
+      resetAll();
+    </script>
+  </body>
+</html>
