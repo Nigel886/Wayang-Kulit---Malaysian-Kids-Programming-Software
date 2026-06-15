@@ -421,7 +421,77 @@
           <div class="absolute inset-0 screen-sheen"></div>
           <div class="dynamic-island absolute left-1/2 top-3 z-30 h-7 w-36 -translate-x-1/2 rounded-full border border-white/10"></div>
 
-          <div class="relative flex h-full w-full flex-col pt-0">
+          <section id="homeScreen" class="absolute inset-0 z-40 overflow-hidden bg-gradient-to-br from-[#1a103e] via-[#31145b] to-[#7a1537]">
+            <div class="absolute inset-0 batik-overlay opacity-60"></div>
+            <div class="absolute -left-8 top-24 h-28 w-28 rounded-full bg-amber-300/20 blur-2xl"></div>
+            <div class="absolute -right-10 bottom-32 h-36 w-36 rounded-full bg-fuchsia-400/20 blur-2xl"></div>
+
+            <div class="relative flex h-full flex-col px-5 pb-6 pt-16">
+              <div class="rounded-[2rem] border-4 border-white/15 bg-white/10 p-4 shadow-plush backdrop-blur-sm">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="min-w-0">
+                    <div class="inline-flex items-center rounded-full border-2 border-amber-200/40 bg-amber-300/15 px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.18em] text-amber-100">
+                      Malaysian Kids HCI Quest
+                    </div>
+                    <h1 class="mt-3 font-fredoka text-[1.85rem] font-extrabold leading-8 text-white drop-shadow">
+                      Wayang Kulit
+                      <span class="block text-amber-200">Coding Quest</span>
+                    </h1>
+                    <p class="mt-3 text-[12px] font-semibold leading-5 text-white/85">
+                      Learn sequences, loops, and smart planning through a magical shadow puppet adventure.
+                    </p>
+                  </div>
+                  <div class="flex shrink-0 flex-col items-end gap-2">
+                    <div class="rounded-2xl border-4 border-white/20 bg-gradient-to-br from-amber-300 to-orange-400 px-3 py-2 text-lg shadow-card">🎭</div>
+                    <div class="flex gap-1 text-base">
+                      <span class="animate-starPulse" style="animation-delay:0ms">⭐</span>
+                      <span class="animate-starPulse" style="animation-delay:140ms">⭐</span>
+                      <span class="animate-starPulse" style="animation-delay:280ms">⭐</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="mt-4 rounded-[2rem] border-4 border-white/15 bg-white/10 p-4 shadow-card backdrop-blur-sm">
+                <div class="flex items-center justify-between gap-3">
+                  <div>
+                    <div class="font-fredoka text-lg font-extrabold text-white">Choose Your Adventure</div>
+                    <div class="text-[12px] font-semibold text-white/75">Only Level 1 is available in this prototype.</div>
+                  </div>
+                  <div class="rounded-2xl border-4 border-white/20 bg-white/10 px-3 py-1 text-[11px] font-extrabold text-amber-100">Prototype</div>
+                </div>
+
+                <div class="mt-4 space-y-3">
+                  <button id="homeLevel1Btn" class="w-full rounded-3xl border-4 border-emerald-900/20 bg-gradient-to-br from-emerald-300 to-cyan-200 px-4 py-4 text-left shadow-card transition hover:scale-[1.01] active:scale-[0.99]" type="button">
+                    <div class="flex items-center justify-between gap-3">
+                      <div>
+                        <div class="font-fredoka text-base font-extrabold text-emerald-950">Level 1: Wayang Dance Quest</div>
+                        <div class="mt-1 text-[12px] font-semibold text-emerald-950/70">Learn how to move, raise Kris, and bow to finish the show</div>
+                      </div>
+                      <div class="rounded-2xl border-4 border-white/40 bg-white/65 px-3 py-1.5 text-[12px] font-extrabold text-emerald-950 shadow">Play</div>
+                    </div>
+                  </button>
+
+                  <button class="w-full cursor-not-allowed rounded-3xl border-4 border-white/10 bg-white/10 px-4 py-4 text-left opacity-70" type="button" disabled>
+                    <div class="font-fredoka text-base font-extrabold text-white">Level 2: Gamelan Loops</div>
+                    <div class="mt-1 text-[12px] font-semibold text-white/70">Locked for this prototype submission</div>
+                  </button>
+
+                  <button class="w-full cursor-not-allowed rounded-3xl border-4 border-white/10 bg-white/10 px-4 py-4 text-left opacity-70" type="button" disabled>
+                    <div class="font-fredoka text-base font-extrabold text-white">Level 3: If-Then Lanterns</div>
+                    <div class="mt-1 text-[12px] font-semibold text-white/70">Locked for this prototype submission</div>
+                  </button>
+                </div>
+
+                <button id="startGameBtn" class="mt-4 w-full rounded-3xl border-4 border-amber-100/20 bg-gradient-to-r from-amber-300 via-orange-400 to-rose-400 px-4 py-3 text-base font-extrabold text-slate-900 shadow-card transition hover:scale-[1.01] active:scale-[0.99]" type="button">
+                  Start Game
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <div id="gameScreen" class="relative flex h-full w-full flex-col pt-0">
             <header
               id="mobileHeader"
               class="relative z-20 border-b-4 border-white/10 bg-gradient-to-r from-emerald-500/25 via-cyan-500/20 to-fuchsia-500/20 px-3 pb-3 pt-12"
@@ -454,7 +524,7 @@
               </div>
 
               <div class="mt-3 flex items-center justify-between gap-3 rounded-2xl border-4 border-white/15 bg-white/10 px-3 py-2 shadow-card">
-                <div class="select-none text-[11px] font-bold text-white/90">Show Academic Annotations</div>
+                <div class="select-none text-[11px] font-bold text-white/90">User Guide</div>
                 <label id="annoToggleWrap" class="relative inline-flex shrink-0 cursor-pointer select-none items-center pointer-events-auto">
                   <input id="annoToggle" type="checkbox" class="peer sr-only" />
                   <div class="h-6 w-11 rounded-full bg-white/20 ring-2 ring-white/15 transition peer-checked:bg-emerald-400/70"></div>
@@ -469,14 +539,14 @@
                 data-bubble="tri"
                 data-target="triPaneAnchor"
               >
-                Classic Tri-Pane Layout reducing the Gulf of Execution via Familiar Schema
+                This top area shows your level goal and the menu. Read it first before you start building.
               </div>
               <div
                 class="speech-bubble pointer-bottom absolute w-[240px] max-w-[72%] rounded-2xl p-3 text-[11px] font-semibold text-slate-900"
                 data-bubble="menu"
                 data-target="menuBtn"
               >
-                Menu Button to select a different Level
+                Tap Menu to check available levels. In this prototype, only Level 1 is playable.
               </div>
             </div>
 
@@ -487,28 +557,28 @@
                   data-bubble="canvas"
                   data-target="canvasZone"
                 >
-                  Translucent Shadow Outline Preview supporting developing Motor Skills
+                  Drag blocks here. The glowing preview shows where your next block will snap.
                 </div>
                 <div
                   class="speech-bubble pointer-bottom absolute w-[260px] max-w-[78%] rounded-2xl p-3 text-[11px] font-semibold text-slate-900"
                   data-bubble="notches"
                   data-target="paletteHintNotch"
                 >
-                  Geometric Slots acting as Physical Constraints for Error Prevention
+                  The puzzle notches help blocks feel connected, so it is easier to place them in order.
                 </div>
                 <div
                   class="speech-bubble pointer-bottom absolute w-[260px] max-w-[78%] rounded-2xl p-3 text-[11px] font-semibold text-slate-900"
                   data-bubble="loop"
                   data-target="palettePane"
                 >
-                  Nested Container Metaphor making Abstract Iteration Tangible
+                  Use Gamelan Beat to repeat actions. Blocks inside the loop will play again and again.
                 </div>
                 <div
                   class="speech-bubble pointer-bottom absolute w-[260px] max-w-[78%] rounded-2xl p-3 text-[11px] font-semibold text-slate-900"
                   data-bubble="error"
                   data-target="errorAnchor"
                 >
-                  Visual Indicator narrowing down the Gulf of Evaluation during errors
+                  If something goes wrong, the wrong block will shake so you know what to fix.
                 </div>
               </div>
 
@@ -704,7 +774,7 @@
                   </div>
 
                   <div class="mt-4 grid gap-3">
-                    <button class="rounded-3xl border-4 border-emerald-900/15 bg-gradient-to-br from-emerald-300 to-cyan-200 px-4 py-3 text-left shadow-card transition hover:scale-[1.01] active:scale-[0.99]" type="button">
+                    <button id="menuLevel1Btn" class="rounded-3xl border-4 border-emerald-900/15 bg-gradient-to-br from-emerald-300 to-cyan-200 px-4 py-3 text-left shadow-card transition hover:scale-[1.01] active:scale-[0.99]" type="button">
                       <div class="font-fredoka text-base font-extrabold text-emerald-950">Level 1: Wayang Dance Quest</div>
                       <div class="text-sm font-semibold text-emerald-950/70">Sequences + a sneaky obstacle</div>
                     </button>
@@ -720,6 +790,46 @@
 
                   <div class="mt-4 rounded-2xl border-4 border-slate-900/10 bg-white/70 p-3 text-xs font-semibold text-slate-900/70">
                     This prototype simulates a guided puzzle flow for screenshots and UX analysis.
+                  </div>
+                </div>
+              </div>
+
+              <div id="guidePromptModal" class="absolute inset-0 hidden items-center justify-center bg-slate-950/70 p-6 z-[70]">
+                <div class="w-full max-w-md rounded-3xl border-4 border-white/15 bg-gradient-to-br from-white/95 to-amber-50/95 p-5 shadow-plush">
+                  <div class="flex items-start gap-3">
+                    <div class="rounded-2xl border-4 border-emerald-900/15 bg-gradient-to-br from-emerald-300 to-cyan-200 px-3 py-2 text-xl shadow-card">🧭</div>
+                    <div class="min-w-0">
+                      <div class="font-fredoka text-xl font-extrabold text-slate-900">Enable Guide Mode?</div>
+                      <div class="mt-2 text-sm font-semibold leading-6 text-slate-900/75">
+                        First-time players can choose guide mode. If you press <span class="font-extrabold text-emerald-700">Yes</span>, the game will automatically show usage hints on the screen.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-4 rounded-2xl border-4 border-slate-900/10 bg-white/70 p-3 text-xs font-semibold leading-5 text-slate-900/70">
+                    Recommended for first play: turn on guide mode to learn how to drag blocks, use the loop, and understand the stage goals.
+                  </div>
+                  <div class="mt-5 flex gap-3">
+                    <button id="guideYesBtn" class="flex-1 rounded-3xl border-4 border-emerald-900/20 bg-gradient-to-r from-emerald-300 to-cyan-200 px-4 py-3 text-sm font-extrabold text-emerald-950 shadow-card transition hover:scale-[1.01] active:scale-[0.99]" type="button">Yes, show guide</button>
+                    <button id="guideNoBtn" class="flex-1 rounded-3xl border-4 border-slate-900/15 bg-white px-4 py-3 text-sm font-extrabold text-slate-900 shadow transition hover:scale-[1.01] active:scale-[0.99]" type="button">No, start directly</button>
+                  </div>
+                </div>
+              </div>
+
+              <div id="finishModal" class="absolute inset-0 hidden items-center justify-center bg-slate-950/70 p-6 z-[70]">
+                <div class="w-full max-w-md rounded-3xl border-4 border-white/15 bg-gradient-to-br from-white/95 to-amber-50/95 p-5 shadow-plush">
+                  <div class="text-center">
+                    <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full border-4 border-amber-200/60 bg-gradient-to-br from-amber-300 to-orange-400 text-3xl shadow-card">
+                      🏆
+                    </div>
+                    <div class="mt-4 font-fredoka text-2xl font-extrabold text-slate-900">Level Complete!</div>
+                    <div class="mt-2 text-sm font-semibold leading-6 text-slate-900/75">
+                      Hanuman reached the star and finished the performance beautifully. Great job building the script!
+                    </div>
+                  </div>
+                  <div class="mt-5 grid gap-3">
+                    <button id="playAgainBtn" class="rounded-3xl border-4 border-emerald-900/20 bg-gradient-to-r from-emerald-300 to-cyan-200 px-4 py-3 text-sm font-extrabold text-emerald-950 shadow-card transition hover:scale-[1.01] active:scale-[0.99]" type="button">Play Again</button>
+                    <button id="nextLevelBtn" class="rounded-3xl border-4 border-white/15 bg-gradient-to-r from-fuchsia-300 to-rose-300 px-4 py-3 text-sm font-extrabold text-slate-900 shadow-card transition hover:scale-[1.01] active:scale-[0.99]" type="button">Next Level</button>
+                    <button id="backHomeBtn" class="rounded-3xl border-4 border-slate-900/15 bg-white px-4 py-3 text-sm font-extrabold text-slate-900 shadow transition hover:scale-[1.01] active:scale-[0.99]" type="button">Back to Homepage</button>
                   </div>
                 </div>
               </div>
@@ -836,9 +946,14 @@
         obstacleShattered: false,
         lastErrorBlockId: null,
         pointersDown: false,
+        selectedLevel: 1,
       };
 
       const el = {
+        homeScreen: document.getElementById("homeScreen"),
+        gameScreen: document.getElementById("gameScreen"),
+        startGameBtn: document.getElementById("startGameBtn"),
+        homeLevel1Btn: document.getElementById("homeLevel1Btn"),
         palette: document.getElementById("palette"),
         canvas: document.getElementById("canvas"),
         canvasZone: document.getElementById("canvasZone"),
@@ -849,6 +964,7 @@
         stageBanner: document.getElementById("stageBanner"),
         menuBtn: document.getElementById("menuBtn"),
         menuModal: document.getElementById("menuModal"),
+        menuLevel1Btn: document.getElementById("menuLevel1Btn"),
         closeMenu: document.getElementById("closeMenu"),
         comingSoon: document.getElementById("comingSoon"),
         annoToggle: document.getElementById("annoToggle"),
@@ -856,6 +972,13 @@
         headerAnnotationLayer: document.getElementById("headerAnnotationLayer"),
         annotationLayer: document.getElementById("annotationLayer"),
         screenScroll: document.getElementById("screenScroll"),
+        guidePromptModal: document.getElementById("guidePromptModal"),
+        guideYesBtn: document.getElementById("guideYesBtn"),
+        guideNoBtn: document.getElementById("guideNoBtn"),
+        finishModal: document.getElementById("finishModal"),
+        playAgainBtn: document.getElementById("playAgainBtn"),
+        nextLevelBtn: document.getElementById("nextLevelBtn"),
+        backHomeBtn: document.getElementById("backHomeBtn"),
       };
 
       function toast(msg) {
@@ -867,6 +990,64 @@
           el.toast.classList.add("hidden");
           el.toast.classList.remove("animate-pop");
         }, 1400);
+      }
+
+      function showHomeScreen() {
+        el.homeScreen?.classList.remove("hidden");
+        el.gameScreen?.classList.add("hidden");
+        el.finishModal?.classList.add("hidden");
+        el.finishModal?.classList.remove("flex");
+        el.guidePromptModal?.classList.add("hidden");
+        el.guidePromptModal?.classList.remove("flex");
+      }
+
+      function showGameScreen() {
+        el.homeScreen?.classList.add("hidden");
+        el.gameScreen?.classList.remove("hidden");
+      }
+
+      function openGuidePrompt() {
+        el.guidePromptModal?.classList.remove("hidden");
+        el.guidePromptModal?.classList.add("flex");
+      }
+
+      function closeGuidePrompt() {
+        el.guidePromptModal?.classList.add("hidden");
+        el.guidePromptModal?.classList.remove("flex");
+      }
+
+      function openFinishModal() {
+        el.finishModal?.classList.remove("hidden");
+        el.finishModal?.classList.add("flex");
+      }
+
+      function closeFinishModal() {
+        el.finishModal?.classList.add("hidden");
+        el.finishModal?.classList.remove("flex");
+      }
+
+      function startLevelFlow() {
+        state.selectedLevel = 1;
+        el.menuModal?.classList.add("hidden");
+        el.menuModal?.classList.remove("flex");
+        seedLevelOneProgram();
+        showGameScreen();
+        closeFinishModal();
+        openGuidePrompt();
+      }
+
+      function setGuideMode(on) {
+        if (el.annoToggle) el.annoToggle.checked = on;
+        toggleAnnotations(on);
+      }
+
+      function seedLevelOneProgram() {
+        state.program = [
+          { id: uid(), kind: "action", action: "move" },
+          { id: uid(), kind: "action", action: "kris" },
+        ];
+        render();
+        resetAll();
       }
 
       function mkBlockButton(type) {
@@ -1942,6 +2123,9 @@
           if (state.step >= 4 && steps[steps.length - 1].action === "bow") {
             el.stageBanner.textContent = "Level Complete! Hanuman celebrates your perfect script!";
             sparkleConfetti();
+            setTimeout(() => {
+              if (token === state.runToken) openFinishModal();
+            }, 650);
           } else if (state.step >= 4) {
             el.stageBanner.textContent = "So close! Add a final Bow on Grid 5 to finish with respect.";
             toast("Add a Bow at the end to complete the quest!");
@@ -1961,6 +2145,8 @@
       function resetAll() {
         clearError();
         setRunningUI(false);
+        state.step = 0;
+        state.krisReady = false;
         restoreObstacle();
         el.stageBanner.textContent = "👋 Welcome, Tok Dalang! Let's build a script on the scroll to guide Hanuman to the Grid 5 Star!";
         setPuppetPos(0);
@@ -2072,6 +2258,7 @@
       el.resetBtn.addEventListener("click", () => {
         state.runToken += 1;
         setRunningUI(false);
+        closeFinishModal();
         clearError();
         cleanupDrag();
         el.canvasZone.classList.remove("animate-jiggle");
@@ -2100,6 +2287,7 @@
           el.menuModal.classList.remove("flex");
         }
       });
+      el.menuLevel1Btn?.addEventListener("click", () => startLevelFlow());
       el.comingSoon.addEventListener("click", () => {
         toast("✨ Surprise! Add a Loop and repeat your moves!");
         el.menuModal.classList.add("hidden");
@@ -2110,6 +2298,39 @@
       el.annoToggleWrap?.addEventListener("pointerdown", (e) => {
         e.stopPropagation();
       });
+      el.startGameBtn?.addEventListener("click", () => startLevelFlow());
+      el.homeLevel1Btn?.addEventListener("click", () => startLevelFlow());
+      el.guideYesBtn?.addEventListener("click", () => {
+        setGuideMode(true);
+        closeGuidePrompt();
+        toast("Guide mode is on. Follow the hints on screen!");
+      });
+      el.guideNoBtn?.addEventListener("click", () => {
+        setGuideMode(false);
+        closeGuidePrompt();
+        toast("Guide mode is off. You can still toggle it later.");
+      });
+      el.guidePromptModal?.addEventListener("click", (e) => {
+        if (e.target === el.guidePromptModal) {
+          setGuideMode(false);
+          closeGuidePrompt();
+        }
+      });
+      el.playAgainBtn?.addEventListener("click", () => {
+        closeFinishModal();
+        seedLevelOneProgram();
+        toast("Let's play again!");
+      });
+      el.nextLevelBtn?.addEventListener("click", () => {
+        closeFinishModal();
+        toast("Level 2 is coming soon. This prototype currently supports Level 1 only.");
+      });
+      el.backHomeBtn?.addEventListener("click", () => {
+        closeFinishModal();
+        setGuideMode(false);
+        seedLevelOneProgram();
+        showHomeScreen();
+      });
       window.addEventListener("resize", () => {
         if (!el.annotationLayer.classList.contains("hidden")) {
           repositionAnnotations();
@@ -2117,12 +2338,9 @@
       });
 
       buildPalette();
-      state.program = [
-        { id: uid(), kind: "action", action: "move" },
-        { id: uid(), kind: "action", action: "kris" },
-      ];
-      render();
-      resetAll();
+      seedLevelOneProgram();
+      setGuideMode(false);
+      showHomeScreen();
     </script>
   </body>
 </html>
